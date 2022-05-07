@@ -37,6 +37,8 @@ function construct()
     construct(A)
 end
 
+matrixize(a) = reshape(a,length(a),1)
+
 function get_definite(A::Array{Array{Int64,1}})
     [length(x) == 1 ? x[1] : 0 for x in vec(A)]
 end
@@ -44,7 +46,8 @@ end
 function get_row(A::Sudoku,i)
     #view(A.val,i,:)
     row = A.val[i,:]
-    reshape(row,length(row),1)
+    matrixize(row)
+    #reshape(row,length(row),1) # matrix banako 
 end
 
 
@@ -52,7 +55,7 @@ function get_col(A::Sudoku,i)
     #view(A.val,:,i)
     col = A.val[:,i]
     #A.val[:,i]
-    reshape(col,length(col),1)
+    matrixize(col)
 end
 
 
@@ -62,7 +65,8 @@ function get_cell(A::Sudoku,i,j)
     crm, crx = 3celli + 1, 3celli  + 3
     ccm, ccx = 3cellj + 1, 3cellj  + 3
     #view(A.val,crm:crx,ccm:ccx)
-    A.val[crm:crx,ccm:ccx]
+    cell = A.val[crm:crx,ccm:ccx]
+    reshape(cell,3,3)
 end
 
 function union_except(array::Array{Array{Int64,1}},a::Int64,b::Int64)
@@ -79,6 +83,7 @@ end
 
 function find_unique_if_any(A::Array{Array{Int64,1}})
     r,c = size(A)
+    #println("The size is $r $c ")
     for i ∈ 1:r, j ∈ 1:c
         any_left = setdiff(A[i,j],union_except(A,i,j))
         if length(any_left) == 1
@@ -87,7 +92,6 @@ function find_unique_if_any(A::Array{Array{Int64,1}})
     end
     return false, 0 , 0 , [0]
 end
-
 
 
 function solveiterate!(S::Sudoku)
@@ -102,16 +106,26 @@ function solveiterate!(S::Sudoku)
                 left = setdiff(cellval,definite)
                 S.val[i,j] = left
 
-                #if length(left) > 1
-                #    success,i,j,unique = find_unique_if_any(get_row(S,i))
-                #    if success
-                #        S.val[i,j] = unique
-                #    end
-                #    #replace_unique_if_any!(get_row(S,i))
-                #    #replace_unique_if_any!(get_col(S,j))
-                #    #replace_unique_if_any!(get_cell(S,i,j))
-                #end
+                if length(left) > 1
+                    success,m,n,unique = find_unique_if_any(get_row(S,i))
+                    if success
+                        S.val[i,m] = unique
+                    end
+
+                    success,m,n,unique = find_unique_if_any(get_col(S,j))
+                    if success
+                        S.val[m,j] = unique
+                    end
+
+                    success,m,n,unique = find_unique_if_any(get_cell(S,i,j))
+                    if success
+                        ci = 3*((i-1)÷3) + 1 + (m-1)
+                        cj = 3*((j-1)÷3) + 1 + (n-1)
+                        S.val[ci,cj] = unique
+                    end
+                end
             end
         end
     end
 end
+
