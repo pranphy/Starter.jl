@@ -1,9 +1,6 @@
 module PraPhysics
 
 include("utils.jl")
-
-greet() = print("Hello World!")
-
-export greet
+include("plot.jl")
 
 end # module

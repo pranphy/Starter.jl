@@ -2,3 +2,8 @@ name = "PraPhysics"
 uuid = "268977b5-2e6c-47c9-b248-b7bff7ccb664"
 authors = ["Prakash Gautam <pranphy@gmail.com>"]
 version = "0.1.0"
+
+[deps]
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Primes = "27ebfcd6-29c5-5fa9-bf4b-fb8fc14df3ae"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
