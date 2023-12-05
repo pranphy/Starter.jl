@@ -3,7 +3,7 @@ module PraSudoku
 include("solve.jl")
 include("utils.jl")
 
-export Sudoku, display, construct, solveiterate!
-export show # from utils depends on plots
+
+export Sudoku, print, construct, solveiterate!,show, get_grid
 
 end # module

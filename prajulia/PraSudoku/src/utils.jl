@@ -7,6 +7,24 @@
 #
 using Plots
 
+function print(A::Sudoku)
+    # onine = [1,2,3,4,5,6,7,8,9]
+    cnt = 0
+    for i in 1:9
+        for j in 1:9
+            cnt = cnt + (length(A.val[i,j])  > 1 ? 0 : 1)
+            v = length(A.val[i,j]) > 1 ? " " : A.val[i,j][1]
+            Base.print(" $v ")
+        end
+        Base.print("\n")
+    end
+    Base.print(" $cnt filled out of 81 \n")
+end
+
+function get_grid()
+    plot(;size=(400,400),xlims=(0.,9.0),ylims=(0.,9.0),axis=nothing,legend=nothing)
+end
+
 function show(A::Sudoku,p)
     vline!(p,[0],lw=3,color=:black)
     hline!(p,[0],lw=3,color=:black)
